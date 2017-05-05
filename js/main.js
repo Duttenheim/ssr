@@ -40,6 +40,8 @@ window.addEventListener("load", function()
 							// test
 							FetchAllSensors();
 
+							SensorViz("scene", 50, {lon: 0, lat: 0, alt:0});
+
 							var dev = new Device("camera-mode", "map-mode");
 							dev.BindToCamera("cameraTransform");
 						});

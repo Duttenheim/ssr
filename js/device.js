@@ -36,14 +36,14 @@ function Device(portrait, landscape)
 			decimalCount:2,
 		};
 
-/*
+
 	this.gn = gn;
 	this.gn.init(args).then(function()
 						{
 							this.gn.start(function(data)
 									 {
 										 // if no transform is bound to the device, then why do we care?
-										 if (this.camera != null)
+										 if (this.camera != null && this.gn.isAvailable())
 										 {
 											 var quat = new XML3D.Quat();
 											 quat = new XML3D.Quat().rotateX(data.beta);
@@ -59,7 +59,7 @@ function Device(portrait, landscape)
 										 }
 									 }.bind(this));
 						}.bind(this));
-*/
+
 	// add listener for device orientation, effectively switches to the other 'main' div when rotated
 	window.addEventListener("orientationchange", this.orientationcallback);
 

@@ -21,7 +21,7 @@ function FetchAllSensors()
 	var json = { entities: [{id: " *", type:"sensor", isPattern:"true"}], attributes: []};
 	SendToFiWare(json, function(e)
 				 {
-					 alert(e);
+//					 alert(e);
 				 });
 }
 
@@ -37,7 +37,7 @@ function FetchSensor(id, attributes)
 
 	SendToFiWare(json, function(e)
 				 {
-					 alert(e);
+//					 alert(e);
 				 });
 }
 
@@ -58,7 +58,7 @@ function FetchSensors(ids, attributes)
 
 	SendToFiWare(json, function(e)
 				 {
-					 alert(e);
+//					 alert(e);
 				 });
 }
 
