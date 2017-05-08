@@ -7,7 +7,7 @@
 function Device(portrait, landscape)
 {
 	this.camera = null;
-	this.orientation = new XML3D.Quat();
+	this.position = [0, 0, 0];
 	this.portrait_div = portrait;
 	this.landscape_div = landscape;
 
@@ -42,77 +42,40 @@ function Device(portrait, landscape)
 						{
 							this.gn.start(function(data)
 									 {
+										 this.gn.setHeadDirection();
 										 // if no transform is bound to the device, then why do we care?
-										 if (this.camera != null && this.gn.isAvailable())
+										 if (this.camera != null)
 										 {
-											 var quat = new XML3D.Quat();
-											 quat = new XML3D.Quat().rotateX(data.beta);
-											 quat = quat.mul(new XML3D.Quat().rotateY(data.gamma));
-											 quat = quat.mul(new XML3D.Quat().rotateZ(data.alpha));
-											 var axang = XML3D.AxisAngle.fromQuat(quat);
-											 var str = axang.axis.x + " " + axang.axis.y + " " + axang.axis.z + " " + axang.angle;
-											 this.camera.setAttribute("rotation", str);
-
-											 //this.camera.rotate(this.orientation);
-											 
-											 //this.camera.transformInterface.orientation = this.orientation;
+											 if (this.gn.isAvailable(GyroNorm.DEVICE_ORIENTATION))
+											 {
+												 var quatval = ConvertOrientationToQuaternion(data.do.alpha, data.do.beta, data.do.gamma);
+												 var quat = new XML3D.Quat(quatval[0], quatval[1], quatval[2], quatval[3]);
+												 quat = quat.normalize();
+												 
+												 var axang = XML3D.AxisAngle.fromQuat(quat);
+												 var str = "{0} {1} {2} {3}".format(axang.axis.x, axang.axis.y, axang.axis.z, axang.angle);
+												 var debug = document.getElementById("debug");
+												 debug.innerHTML = "{0} {1} {2}".format(data.do.alpha, data.do.beta, data.do.gamma);
+												 this.camera.setAttribute("rotation", str);
+											 }
+											 if (this.gn.isAvailable(GyroNorm.DEVICE_MOTION))
+											 {
+												 this.position[0] += data.dm.x;
+												 this.position[1] += data.dm.y;
+												 this.position[2] += data.dm.z;
+												 var str = "{0} {1} {2}".format(this.position[0] * 100, this.position[1] * 100, this.position[2] * 100);
+												 //var debug = document.getElementById("debug");
+												 //debug.innerHTML = str;
+												 
+												 //this.camera.setAttribute("translation", str);
+											 }
 										 }
 									 }.bind(this));
 						}.bind(this));
 
+
 	// add listener for device orientation, effectively switches to the other 'main' div when rotated
 	window.addEventListener("orientationchange", this.orientationcallback);
-
-/*
-	this.compasscallback = function(event)
-	{
-		// if no transform is bound to the device, then why do we care?
-		if (this.camera != null)
-		{
-			// this is just wrong, we need some better way of convering
-			this.orientation.z = (event.alpha - 90) * Math.PI / 180;
-			this.orientation.x = (event.beta + 90) * Math.PI / 180;
-			this.orientation.y = (-event.gamma + 90) * Math.PI / 180;
-			//this.orientation.z = event.alpha - 180;
-			//this.orientation.x = event.beta;
-			//this.orientation.y = -event.gamma;
-
-			//var length = this.orientation.length();
-			//this.orientation = this.orientation.normalize();
-			var quat = new XML3D.Quat();
-			quat = new XML3D.Quat().rotateX(this.orientation.x);
-			quat = quat.mul(new XML3D.Quat().rotateY(this.orientation.y));
-			quat = quat.mul(new XML3D.Quat().rotateZ(this.orientation.z));
-			var axang = XML3D.AxisAngle.fromQuat(quat);
-			var str = axang.axis.x + " " + axang.axis.y + " " + axang.axis.z + " " + axang.angle;
-			this.camera.setAttribute("rotation", str);
-
-			var deb = document.getElementById("debug");
-			deb.innerHTML = str;
-			//this.camera.rotate(this.orientation);
-			
-			//this.camera.transformInterface.orientation = this.orientation;
-		}
-	}.bind(this);
-
-	if (window.DeviceOrientationEvent)
-	{
-		window.addEventListener("deviceorientation", this.compasscallback);
-	}
-	else
-	{
-		alert("Device does not support orientation measurements!");
-	}
-
-	if (window.DeviceMotionEvent)
-	{
-
-	}
-	else
-	{
-		alert("Device does not support movement measurements!");
-	}
-*/
 }
 
 //------------------------------------------------------------------------------
