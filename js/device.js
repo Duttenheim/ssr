@@ -32,8 +32,9 @@ function Device(portrait, landscape)
 		{
 			frequency:50,
 			gravityNormalized:true,
-			orientationBase:GyroNorm.GAME,
+			orientationBase:GyroNorm.WORLD,
 			decimalCount:2,
+			screenAdjusted: false
 		};
 
 
@@ -42,7 +43,7 @@ function Device(portrait, landscape)
 						{
 							this.gn.start(function(data)
 									 {
-										 this.gn.setHeadDirection();
+										 //this.gn.setHeadDirection();
 										 // if no transform is bound to the device, then why do we care?
 										 if (this.camera != null)
 										 {
@@ -51,26 +52,34 @@ function Device(portrait, landscape)
 												 var quatval = ConvertOrientationToQuaternion(data.do.alpha, data.do.beta, data.do.gamma);
 												 var quat = new XML3D.Quat(quatval[0], quatval[1], quatval[2], quatval[3]);
 												 quat = quat.normalize();
+
+												 // rotate so that Z is actually Z
+												 var rot = new XML3D.Quat().rotateX(-Math.PI/2);
+												 quat = rot.mul(quat);
+												 quat = quat.normalize();
 												 
 												 var axang = XML3D.AxisAngle.fromQuat(quat);
 												 var str = "{0} {1} {2} {3}".format(axang.axis.x, axang.axis.y, axang.axis.z, axang.angle);
 												 var debug = document.getElementById("debug");
-												 debug.innerHTML = "{0} {1} {2}".format(data.do.alpha, data.do.beta, data.do.gamma);
+												 //debug.innerHTML = "{0} {1} {2}".format(data.do.alpha, data.do.beta, data.do.gamma);
+												 debug.innerHTML = str;
 												 this.camera.setAttribute("rotation", str);
+												 //this.camera.innerHTML = str;
 											 }
 											 if (this.gn.isAvailable(GyroNorm.DEVICE_MOTION))
 											 {
 												 this.position[0] += data.dm.x;
 												 this.position[1] += data.dm.y;
 												 this.position[2] += data.dm.z;
-												 var str = "{0} {1} {2}".format(this.position[0] * 100, this.position[1] * 100, this.position[2] * 100);
+												 var str = "{0} {1} {2}".format(this.position[0], this.position[1], this.position[2]);
 												 //var debug = document.getElementById("debug");
 												 //debug.innerHTML = str;
 												 
-												 //this.camera.setAttribute("translation", str);
+												 this.camera.setAttribute("translation", str);
 											 }
 										 }
 									 }.bind(this));
+							this.gn.setHeadDirection();
 						}.bind(this));
 
 
@@ -87,8 +96,18 @@ Device.prototype.BindToCamera = function(id)
 {
 	var cam = document.getElementById(id);
 	this.camera = cam;
-	//this.camera = new XML3D.StandardCamera(cam, {mode: "fly"});
+}
 
-	// detach camera since it should be dependent on device orientation
-	//this.camera.detach();
+//------------------------------------------------------------------------------
+/**
+   Start tracking position
+   @param callback is a function which is periodically called whenever the geolocation service returns a new position
+*/
+Device.prototype.TrackLocation = function(callback)
+{
+	// only do if we have geolocation
+	if (navigator.geolocation)
+	{
+		navigator.geolocation.watchPosition(callback);
+	}
 }

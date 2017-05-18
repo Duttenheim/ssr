@@ -40,9 +40,9 @@ function ConvertOrientationToQuaternion(alpha, beta, gamma)
 {
 	const degtorad = Math.PI / 180;
 
-	var _x = beta  ? beta  * degtorad : 0; // beta value
-	var _y = gamma ? gamma * degtorad : 0; // gamma value
-	var _z = alpha ? alpha * degtorad : 0; // alpha value
+	var _x = beta  * degtorad;
+	var _y = gamma * degtorad;
+	var _z = alpha * degtorad;
 
 	var cX = Math.cos( _x/2 );
 	var cY = Math.cos( _y/2 );

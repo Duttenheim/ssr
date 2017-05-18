@@ -1,33 +1,25 @@
-'use strict';
 
-navigator.getUserMedia = navigator.getUserMedia ||
-    navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+CameraVideoSelect = "video-select";
+CameraVideoDisplayDiv = "video";
+CameraStartup(function(err) {alert(err);});
 
-var constraints = {
-  audio: false,
-  video: true
-};
-
-var video = document.querySelector('video');
-
-function successCallback(stream)
+var Map;
+var Me;
+function SetupMap()
 {
-	window.stream = stream; // stream available to console
-	if (window.URL)
-	{
-		video.src = window.URL.createObjectURL(stream);
-	}
-	else
-	{
-		video.src = stream;
-	}
+	var uluru = {lat: -25.363, lng: 131.044};
+	Map = new google.maps.Map(document.getElementById('map-mode'), 
+							  {
+								  zoom: 2,
+								  center: uluru,
+								  mapTypeId: 'terrain'
+							  });
+	Me = new google.maps.Marker(
+		{
+			position: uluru,
+			map: Map
+		});
 }
-
-function errorCallback(error) {
-  console.log('navigator.getUserMedia error: ', error);
-}
-
-navigator.getUserMedia(constraints, successCallback, errorCallback);
 
 window.addEventListener("load", function()
 						{
@@ -56,4 +48,11 @@ window.addEventListener("load", function()
 
 							var dev = new Device("camera-mode", "map-mode");
 							dev.BindToCamera("cameraTransform");
+
+							dev.TrackLocation(function(position)
+											  {
+												  var latlong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+												  Me.setPosition(latlong);
+												  Map.setCenter(latlong);
+											  });
 						});
