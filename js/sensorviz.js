@@ -37,8 +37,3 @@ function SensorViz(group, position, ID, updateFrequency)
 	// add element to root
 	root.appendChild(mesh);
 }
-
-function bleh(event)
-{
-	alert("everyday im hovering...");
-}

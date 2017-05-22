@@ -1,7 +1,5 @@
 
-CameraVideoSelect = "video-select";
-CameraVideoDisplayDiv = "video";
-CameraStartup(function(err) {alert(err);});
+CameraStartup("video-select", "video", function(err) {alert(err);});
 
 var Map;
 var Me;
@@ -10,7 +8,7 @@ function SetupMap()
 	var uluru = {lat: -25.363, lng: 131.044};
 	Map = new google.maps.Map(document.getElementById('map-mode'), 
 							  {
-								  zoom: 2,
+								  zoom: 90,
 								  center: uluru,
 								  mapTypeId: 'terrain'
 							  });

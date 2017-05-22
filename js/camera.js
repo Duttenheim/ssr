@@ -75,10 +75,12 @@ function OnDevices(devices)
    Entry point function for starting the camera, be sure to set the two global variables at the top of this file prior
    @param errorCallback is the function to call if there are any errors setting the camera up
 */
-function CameraStartup(errorCallback)
+function CameraStartup(cameraSelectDiv, cameraDisplayDiv, errorCallback)
 {
+	CameraVideoSelect = cameraSelectDiv;
+	CameraVideoDisplayDiv = cameraDisplayDiv;
 	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-	var select = document.getElementById("video-select");
+	var select = document.getElementById(CameraVideoSelect);
 	navigator.mediaDevices.enumerateDevices().then(OnDevices).then(function()
 																   {
 																	   var constraints = {audio: false, video: {deviceId: select.value}}; 
