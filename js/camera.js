@@ -7,7 +7,6 @@
 */
 var CameraVideoSelect = null;
 var CameraVideoDisplayDiv = null;
-var ReadoutCanvasDiv = null;
 
 //------------------------------------------------------------------------------
 /**
@@ -100,19 +99,23 @@ function CameraStartup(cameraSelect, cameraDisplayDiv, errorCallback)
 			 ).catch(errorCallback);
 }
 
+var ReadoutCanvasDiv = null;
+var ReadoutCallback = null;
+var ReadoutFrequency = 0;
+var ReadoutInterval = null;
+
 //------------------------------------------------------------------------------
 /**
    Start blitting image data to canvas, and return image buffer, for filtering and image processing
    @param callback is a function to call when a QR code is found
    @param frequency is the frequency with which to call the callback function
 */
-function ReadPixelsStartup(callback, frequency)
+function InitiateCapture(callback, frequency)
 {
 	ReadoutCanvasDiv = document.createElement("canvas");
 	ReadoutCanvasDiv.style.display = 'none';
-	var ctx = ReadoutCanvasDiv.getContext("2d");
-
-	setInterval(function() {
+	ReadoutCallback = function() 
+	{
 		let width = CameraVideoDisplayDiv.videoWidth;
 		let height = CameraVideoDisplayDiv.videoHeight;
 
@@ -128,5 +131,24 @@ function ReadPixelsStartup(callback, frequency)
 		ctx.drawImage(CameraVideoDisplayDiv, 0, 0, width, height);
 		var data = ctx.getImageData(0, 0, width, height);
 		callback(data);
-	}, frequency);
+	};
+	ReadoutFrequency = frequency;
+}
+
+//------------------------------------------------------------------------------
+/**
+   Start reading video and run callback
+*/
+function StartCapture()
+{
+	ReadoutInterval = setInterval(ReadoutCallback, ReadoutFrequency);
+}
+
+//------------------------------------------------------------------------------
+/**
+   Stop reading callback
+*/
+function StopCapture()
+{
+	clearInterval(ReadoutInterval);
 }

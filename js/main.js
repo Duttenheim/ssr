@@ -7,9 +7,9 @@ function SetupGMap()
 	var uluru = {lat: -25.363, lng: 131.044};
 	GMap = new google.maps.Map(document.getElementById('map-mode'), 
 							  {
-								  zoom: 90,
+								  zoom: 8,
 								  center: uluru,
-								  mapTypeId: 'terrain'
+								  //mapTypeId: 'terrain'
 							  });
 	GMe = new google.maps.Marker(
 		{
@@ -20,15 +20,7 @@ function SetupGMap()
 
 window.addEventListener("load", function()
 						{
-							var vid = document.getElementById("video");
-							if (vid.requestFullscreen)
-							{
-								vid.requestFullscreen();
-							}
-							if (screen.lockOrientation)
-							{
-								var orientation = screen.lockOrientation("portrait");
-							}
+							InitiateFullscreen();
 
 							// test
 							FetchAllSensors(function(json)
@@ -43,15 +35,25 @@ window.addEventListener("load", function()
 							SensorViz("scene", {x: 0, y: 0, z: 1000}, "EnviormentalSensor_S1", 50);
 
 							CameraStartup("video-select", "video", function(err) {alert(err);});
-							ReadPixelsStartup(function(data) { qr.Update(data); }, 1000);
+							InitiateCapture(function(data) { qr.Update(data); }, 1000);
 
-							var dev = new Device("camera-mode", "map-mode");
+							var dev = new Device("camera-mode", "map-mode", function() { StartCapture(); }, function() { StopCapture(); GMap.setZoom(8); GMap.setCenter(GMe.getPosition()); });
+							document.getElementById("map-mode").addEventListener("resize", function()
+																				 {
+																					 if (GMap)
+																					 {
+																						 GMap.setZoom(8);
+																						 GMap.panTo(GMe.getPosition());
+																					 }
+																				 }
+																				);
 							dev.BindToCamera("cameraTransform");
 							dev.TrackLocation(function(position)
 											  {
-												  var latlong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-												  GMe.setPosition(latlong);
-												  GMap.setCenter(latlong);
+												  if (GMe)
+												  {
+													  GMe.setPosition({lat: position.coords.latitude, lng: position.coords.longitude});
+												  }
 											  });
 
 							// start parsing QR
@@ -73,6 +75,5 @@ window.addEventListener("load", function()
 											   {
 												   dev.ForceLocation(parseFloat(coord2[1]), parseFloat(coord1[1]));
 											   }
-											   
 										   });	
 						});

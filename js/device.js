@@ -4,8 +4,10 @@
    Create a mobile device for orientation handling
    @param portrait is the div that should be shown in portrait mode
    @param landscape is the div that should be shown in landscape mode
+   @param portraitCallback is called whenever the portrait mode is engaged
+   @param landscapeCallback is called when the device is in landscape mode
 */
-function Device(portrait, landscape)
+function Device(portrait, landscape, portraitCallback, landscapeCallback)
 {
 	this.camera = null;
 	this.geoCallback = null;
@@ -20,12 +22,14 @@ function Device(portrait, landscape)
 		{
 			document.getElementById(this.portrait_div).style.display = 'none';
 			document.getElementById(this.landscape_div).style.display = 'block';
+			if (landscapeCallback) landscapeCallback();
 		}
 		else
 		{
 			document.getElementById(this.portrait_div).style.display = 'block';
 			document.getElementById(this.landscape_div).style.display = 'none';
-								}
+			if (portraitCallback) portraitCallback();
+		}
 	}.bind(this);
 	this.orientationcallback();
 

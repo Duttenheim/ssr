@@ -34,8 +34,6 @@ function QR(video)
 	
 	// setup from video div, and do an initial resize
 	this.video = document.getElementById(video);
-
-	//window.addEventListener("resize", function() { this.internalImage = this.zxing._resize(this.video.videoWidth, this.video.videoHeight); }.bind(this));
 }
 
 //------------------------------------------------------------------------------
