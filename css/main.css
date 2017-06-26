@@ -7,3 +7,23 @@ video {
   max-width: 100%;
   width: 320px;
 }
+
+.blink {
+	animation: pulse 0.5s;
+}
+
+@keyframes pulse 
+{
+	0% 
+	{
+		opacity: 0;
+	}
+	75%
+	{
+		opacity: 0.75;
+	}
+	100%
+	{
+		opacity: 0;
+	}
+}

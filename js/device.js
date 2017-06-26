@@ -8,6 +8,8 @@
 function Device(portrait, landscape)
 {
 	this.camera = null;
+	this.geoCallback = null;
+	this.geoId = null;
 	this.position = [0, 0, 0];
 	this.portrait_div = portrait;
 	this.landscape_div = landscape;
@@ -104,9 +106,34 @@ Device.prototype.BindToCamera = function(id)
 */
 Device.prototype.TrackLocation = function(callback)
 {
+	this.geoCallback = callback;
+
 	// only do if we have geolocation
 	if (navigator.geolocation)
 	{
-		navigator.geolocation.watchPosition(callback);
+		this.geoId = navigator.geolocation.watchPosition(this.geoCallback);
 	}
+}
+
+//------------------------------------------------------------------------------
+/**
+   Stop tracking position
+*/
+Device.prototype.StopLocation = function()
+{
+	this.geoCallback = null;
+	navigator.geolocation.clearWatch(this.geoId);
+}
+
+//------------------------------------------------------------------------------
+/**
+   Override GPS location using lat-long string
+   @param lat is the latitude
+   @param long is the longitude
+*/
+Device.prototype.ForceLocation = function(lat, long)
+{
+	var pos = {coords: {latitude: lat, longitude:long}};
+	this.geoCallback(pos);
+	//var pos = new Position();
 }

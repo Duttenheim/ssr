@@ -79,7 +79,7 @@ function OnDevices(devices)
    @param cameraCanvas is the name of the <canvas> div to which the video should be output.
    @param errorCallback is the function to call if there are any errors setting the camera up
 */
-function CameraStartup(cameraSelect, cameraDisplayDiv, successCallback, errorCallback)
+function CameraStartup(cameraSelect, cameraDisplayDiv, errorCallback)
 {
 	CameraVideoSelect = document.getElementById(cameraSelect);
 	CameraVideoDisplayDiv = document.getElementById(cameraDisplayDiv);
@@ -95,7 +95,7 @@ function CameraStartup(cameraSelect, cameraDisplayDiv, successCallback, errorCal
 														  }};
 //														   width: { min: 640, ideal: 1280, max: 1920 }, 
 //														   height: { min: 480, ideal: 720, max: 1080 }}};
-				  navigator.mediaDevices.getUserMedia(constraints).then(OnStream).then(successCallback).catch(errorCallback);
+				  navigator.mediaDevices.getUserMedia(constraints).then(OnStream).catch(errorCallback);
 			  }
 			 ).catch(errorCallback);
 }
@@ -104,8 +104,9 @@ function CameraStartup(cameraSelect, cameraDisplayDiv, successCallback, errorCal
 /**
    Start blitting image data to canvas, and return image buffer, for filtering and image processing
    @param callback is a function to call when a QR code is found
+   @param frequency is the frequency with which to call the callback function
 */
-function ReadPixelsStartup(callback)
+function ReadPixelsStartup(callback, frequency)
 {
 	ReadoutCanvasDiv = document.createElement("canvas");
 	ReadoutCanvasDiv.style.display = 'none';
@@ -127,5 +128,5 @@ function ReadPixelsStartup(callback)
 		ctx.drawImage(CameraVideoDisplayDiv, 0, 0, width, height);
 		var data = ctx.getImageData(0, 0, width, height);
 		callback(data);
-	}, 100);
+	}, frequency);
 }
