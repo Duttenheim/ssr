@@ -1,5 +1,6 @@
 //------------------------------------------------------------------------------
 /**
+   Class: Device
    Create a mobile device for orientation handling
    @param portrait is the div that should be shown in portrait mode
    @param landscape is the div that should be shown in landscape mode
@@ -26,7 +27,6 @@ function Device(portrait, landscape)
 	}.bind(this);
 	this.orientationcallback();
 
-
 	var gn = new GyroNorm();
 	var args = 
 		{
@@ -36,7 +36,6 @@ function Device(portrait, landscape)
 			decimalCount:2,
 			screenAdjusted: false
 		};
-
 
 	this.gn = gn;
 	this.gn.init(args).then(function()

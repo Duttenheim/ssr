@@ -2,9 +2,9 @@
 /**
    Create a new sensor, as a coupling of a 3D representation and a data source
    @param group is the group div (in the xml3d document) in which the objects should appear
-   @param updateFrequency is the frequency with which the sensor data should be updated
    @param position is the position of the sensor in cartesian space
    @param ID is the sensor id used to fetch the sensor
+   @param updateFrequency is the frequency with which the sensor data should be updated
 */
 function SensorViz(group, position, ID, updateFrequency)
 {

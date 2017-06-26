@@ -1,21 +1,20 @@
 
-CameraStartup("video-select", "video", function(err) {alert(err);});
 
-var Map;
-var Me;
-function SetupMap()
+var GMap;
+var GMe;
+function SetupGMap()
 {
 	var uluru = {lat: -25.363, lng: 131.044};
-	Map = new google.maps.Map(document.getElementById('map-mode'), 
+	GMap = new google.maps.Map(document.getElementById('map-mode'), 
 							  {
 								  zoom: 90,
 								  center: uluru,
 								  mapTypeId: 'terrain'
 							  });
-	Me = new google.maps.Marker(
+	GMe = new google.maps.Marker(
 		{
 			position: uluru,
-			map: Map
+			map: GMap
 		});
 }
 
@@ -44,13 +43,28 @@ window.addEventListener("load", function()
 							SensorViz("scene", {x: 0, y: 0, z: -1000}, "EnviormentalSensor_S0", 50);
 							SensorViz("scene", {x: 0, y: 0, z: 1000}, "EnviormentalSensor_S1", 50);
 
+							CameraStartup("video-select", "video", function()
+										  {
+											  ReadPixelsStartup(function(data) { qr.Update(data); });
+
+											  // start parsing QR
+											  var qr = new QR("video");
+											  qr.AddListener("p", function(pos)
+															 {
+																 alert(pos);
+															 });
+											  
+										  }, function(err) {alert(err);}
+										 );
+
+
 							var dev = new Device("camera-mode", "map-mode");
 							dev.BindToCamera("cameraTransform");
 
 							dev.TrackLocation(function(position)
 											  {
 												  var latlong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-												  Me.setPosition(latlong);
-												  Map.setCenter(latlong);
+												  GMe.setPosition(latlong);
+												  GMap.setCenter(latlong);
 											  });
 						});

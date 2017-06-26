@@ -35,6 +35,10 @@ if (!String.prototype.format)
 //------------------------------------------------------------------------------
 /**
    From https://w3c.github.io/deviceorientation/spec-source-orientation.html
+   Convert a devices alpha-beta-gamma orientation to a quaternion which is useful for 3D.
+   @param alpha is the device's alpha angle
+   @param beta is the device's beta angle
+   @param gamma is the device's gamma angle
 */
 function ConvertOrientationToQuaternion(alpha, beta, gamma)
 {
