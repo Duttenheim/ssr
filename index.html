@@ -25,8 +25,6 @@
     <script src="js/camera.js"></script>
     <script src="js/qr.js"></script>
     <script src="js/fullscreen.js"></script>
-
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3ZqdMQakJ2fFVbuI1H8uqbPPl-R-GZls&callback=SetupGMap"></script>
     <link rel="stylesheet" href="css/main.css" />
     
 
@@ -78,6 +76,8 @@
     </div>
     
     <script src="js/main.js"></script>
+    <!-- hehe, load it here since it requires a function found in main.js -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3ZqdMQakJ2fFVbuI1H8uqbPPl-R-GZls&callback=SetupGMap"></script>
 </body>
 
 </html>
