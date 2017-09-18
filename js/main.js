@@ -21,6 +21,9 @@ function SetupGMap()
 window.addEventListener("load", function()
 						{
 							InitiateFullscreen();
+							
+							// setup shader for billboard rendering
+							SetupBillboardShader();
 
 							// test
 							FetchAllSensors(function(json)
@@ -29,13 +32,14 @@ window.addEventListener("load", function()
 											}
 										   );
 
-							SensorViz("scene", {x: 1000, y: 0, z: 0}, "EnviormentalSensor_Sokigo1", 50);
-							SensorViz("scene", {x: -1000, y: 0, z: 0}, "Sokigo_spatial", 50);
-							SensorViz("scene", {x: 0, y: 0, z: -1000}, "EnviormentalSensor_S0", 50);
-							SensorViz("scene", {x: 0, y: 0, z: 1000}, "EnviormentalSensor_S1", 50);
+							//SensorViz("scene", {x: 1000, y: 0, z: 0}, "EnviormentalSensor_Sokigo1", 50);
+							//SensorViz("scene", {x: -1000, y: 0, z: 0}, "Sokigo_spatial", 50);
+							//SensorViz("scene", {x: 0, y: 0, z: -1000}, "EnviormentalSensor_S0", 50);
+							//SensorViz("scene", {x: 0, y: 0, z: 1000}, "EnviormentalSensor_S1", 50);
+							SensorVizBillboard("scene", "defs", {x: 0, y: 0, z: 1}, "EnviormentalSensor_S1", "icons/romantic.jpg", 50);
+							SensorVizBillboard("scene", "defs", {x: 1, y: 0, z: 0}, "Sokigo_spatial", "icons/betterdays.jpg", 50);
 
 							CameraStartup("video-select", "video", function(err) {alert(err);});
-							InitiateCapture(function(data) { qr.Update(data); }, 1000);
 
 							var dev = new Device("camera-mode", "map-mode", function() { StartCapture(); }, function() { StopCapture(); GMap.setZoom(8); GMap.setCenter(GMe.getPosition()); });
 							document.getElementById("map-mode").addEventListener("resize", function()
@@ -60,7 +64,7 @@ window.addEventListener("load", function()
 							var qr = new QR("video")
 							qr.AddListener("p", function(pos)
 										   {
-											   var msg = document.getElementById("overlay-message");
+											   var msg = document.getElementById("overlay");
 											   var newMsg = msg.cloneNode(true);
 											   newMsg.innerHTML = "Position acquired!";
 											   newMsg.className = "blink";
@@ -75,5 +79,7 @@ window.addEventListener("load", function()
 											   {
 												   dev.ForceLocation(parseFloat(coord2[1]), parseFloat(coord1[1]));
 											   }
-										   });	
+										   });
+							InitiateCapture(function(data) { qr.Update(data); }, 1000);
+	
 						});

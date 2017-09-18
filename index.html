@@ -25,7 +25,7 @@
     <script src="js/camera.js"></script>
     <script src="js/qr.js"></script>
     <script src="js/fullscreen.js"></script>
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css">
     
 
 </head>
@@ -39,35 +39,42 @@
         </div>
         <video autoplay style="width: 100%; height:100%; position:absolute" id="video"></video>
         <div style="width:100%; height:100%; position:absolute" id="overlay">
-            <div style="position: relative; float:left; left:50%; top:20%; transform:translate(-50%, -50%); font-size:10vw; font-weight: bold; opacity:0; color: #CC0000" id="overlay-message">
+            <div class="overlay-message" id="overlay">
             </div>
         </div>
-        <p id="sensor" style="position:absolute; color:white">
-        </p>
 
-        <xml3d style="width: 100%; height:100%; opacity: 0.75" id="x3d">
+        <p id="sensor" class="sensor-message">
+            [[No sensor selected]]
+        </p>
+        <xml3d style="width: 100%; height:100%; opacity: 0.75;" id="x3d">
             <material id="orange" model="urn:xml3d:material:phong">
                 <float3 name="diffuseColor" >1 0.5 0</float3>
                 <float name="ambientIntensity" >0.5</float>
             </material>
-
-            <!--
-            <data id="deviceCameraTransform">
-                <float4x4 name="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float4x4>
-            </data>
-            -->
+            <defs id="defs">
+                <data id="quadMesh">
+                    <int name="index">0 1 2  1 2 3</int>
+                    <float3 name="position">-1 -1 -5 1 -1 -5 -1 1 -5 1 1 -5</float3>
+                    <!--<float3 name="normal">0 0 1  0 0 1  0 0 1 0 0 1</float3>-->
+                    <float2 name="texcoord">0.0 0.0 1.0 0.0 0.0 1.0 1.0 1.0</float2>
+                </data>
+                <data id="defaultPhong"> 
+                    <float3 name="diffuseColor">1.0 1.0 1.0</float3>
+                    <float name="ambientIntensity">0.0</float>
+                    <float3 name="emissiveColor">0 0 0</float3>
+                    <float3 name="specularColor">0.025 0.025 0.025</float3>
+                </data>
+            </defs>
 
             <transform id="cameraTransform" translation="0 0 0"></transform>
             <view transform="#cameraTransform" id="view"></view>
             
             <light id="light1" model="urn:xml3d:light:directional" >
-                <float3 name="intensity" >1 1 1</float3>
+                <float3 name="intensity">1 1 1</float3>
             </light>
             <group id="scene" material="#orange">
             </group>
         </xml3d>
-        <p id="debug">
-        </p>
     </div>
     <div id="map-mode" style="width:100vw; height:100vh;">
         <p style="text-align: center">
