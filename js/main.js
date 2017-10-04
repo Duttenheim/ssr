@@ -47,6 +47,9 @@ window.addEventListener("load", function()
 
 							CameraStartup("video-select", "video", function(err) {alert(err);});
 
+							var qr = new QR("video")
+							InitiateCapture(function(data) { qr.Update(data); }, 1000);
+
 							var dev = new Device("camera-mode", "map-mode", function() { StartCapture(); }, function() { StopCapture(); GMap.setZoom(8); GMap.setCenter(GMe.getPosition()); });
 							document.getElementById("map-mode").addEventListener("resize", function()
 							{
@@ -56,12 +59,16 @@ window.addEventListener("load", function()
 									GMap.panTo(GMe.getPosition());
 								}
 							});
+	
+							// grab scene div so we can clear it
+							var sceneDiv = document.getElementById("scene");
 
 							dev.BindToCamera("cameraTransform");
 							dev.TrackLocation(function(position)
 							{
 								FetchSensorsRadius({lat: position.coords.latitude, lon: position.coords.longitude}, 100, function(json)
 								{
+									sceneDiv.innerHTML = "";
 									for (var core in json.pois)
 									{
 										var data = json.pois[core].fw_core;
@@ -80,25 +87,23 @@ window.addEventListener("load", function()
 							});
 
 							// start parsing QR
-							var qr = new QR("video")
 							qr.AddListener("p", function(pos)
-										   {
-											   var msg = document.getElementById("overlay");
-											   var newMsg = msg.cloneNode(true);
-											   newMsg.innerHTML = "Position acquired!";
-											   newMsg.className = "blink";
-											   msg.parentNode.replaceChild(newMsg, msg);
-											   var coord1 = pos[0].split(":");
-											   var coord2 = pos[1].split(":");											   
-											   if (coord1[0] == "lat")
-											   {
-												   dev.ForceLocation(parseFloat(coord1[1]), parseFloat(coord2[1]));
-											   }
-											   else
-											   {
-												   dev.ForceLocation(parseFloat(coord2[1]), parseFloat(coord1[1]));
-											   }
-										   });
-							InitiateCapture(function(data) { qr.Update(data); }, 1000);
+							{
+								var msg = document.getElementById("overlay");
+								var newMsg = msg.cloneNode(true);
+								newMsg.innerHTML = "Position acquired!";
+								newMsg.className = "blink";
+								msg.parentNode.replaceChild(newMsg, msg);
+								var coord1 = pos[0].split(":");
+								var coord2 = pos[1].split(":");											   
+								if (coord1[0] == "lat")
+								{
+									dev.ForceLocation(parseFloat(coord1[1]), parseFloat(coord2[1]));
+								}
+								else
+								{
+									dev.ForceLocation(parseFloat(coord2[1]), parseFloat(coord1[1]));
+								}
+							});
 	
 						});
