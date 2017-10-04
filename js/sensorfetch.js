@@ -1,5 +1,7 @@
 //var url = "http://130.240.134.126:1026/v1/queryContext";
-var QueryURL = "https://staff.www.ltu.se/~gusste/proxy.php";
+var QueryURL = "https://staff.www.ltu.se/~gusste/proxy.php"; // use this to fetch sensor data
+var QueryURLPOIRadial = "https://staff.www.ltu.se/~gusste/proxy_poi_rad.php"; // use this to fetch nearby sensors
+var QueryURLPOIBox = "https://staff.www.ltu.se/~gusste/proxy_poi_box.php"; // use this to fetch nearby sensors
 
 //------------------------------------------------------------------------------
 /**
@@ -10,7 +12,8 @@ var QueryURL = "https://staff.www.ltu.se/~gusste/proxy.php";
 */
 function FetchSensorsRadius(location, radius, callback)
 {
-	// this requires the POI service and a URL to it...!!!!!!one
+	var json = { lat: location.lat, lon: location.lon, radius: radius, component: "fw_core", category: "sensor", max_results: 30 };
+ 	SendToFiWarePost(QueryURLPOIRadial, json, callback);
 }
 
 //------------------------------------------------------------------------------
@@ -22,7 +25,8 @@ function FetchSensorsRadius(location, radius, callback)
 */
 function FetchSensorsBox(min, max, callback)
 {
-
+	var json = { north: max.y, south: min.y, east: max.x, west: min.x, component: "fw_core", category: "sensor", max_results: 30 };
+ 	SendToFiWarePost(QueryURLPOIBox, json, callback);
 }
 
 //------------------------------------------------------------------------------
@@ -81,7 +85,15 @@ function SendToFiWarePost(url, json, callback)
 	{
 		if (this.readyState == 4 && this.status == 200)
 		{
-			var json = JSON.parse(this.responseText);
+			try 
+			{
+				var json = JSON.parse(this.responseText);
+			}
+			catch (e)
+			{
+				alert(this.responseText);
+				return;
+			}
 			callback(json);
 		}
 	}
@@ -102,7 +114,15 @@ function SendToFiWareGet(url, callback)
 	{
 		if (this.readyState == 4 && this.status == 200)
 		{
-			var json = JSON.parse(this.responseText);
+			try 
+			{
+				var json = JSON.parse(this.responseText);
+			}
+			catch (e)
+			{
+				alert(this.responseText);
+				return;
+			}
 			callback(json);
 		}
 	}

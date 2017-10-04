@@ -117,6 +117,10 @@ Device.prototype.TrackLocation = function(callback)
 	{
 		this.geoId = navigator.geolocation.watchPosition(this.geoCallback);
 	}
+	else
+	{
+		alert("No geolocation service available!");
+	}
 }
 
 //------------------------------------------------------------------------------
