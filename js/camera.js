@@ -152,3 +152,12 @@ function StopCapture()
 {
 	clearInterval(ReadoutInterval);
 }
+
+//------------------------------------------------------------------------------
+/**
+   Scan for QR codes
+*/
+function Scan()
+{
+	ReadoutCallback();
+}

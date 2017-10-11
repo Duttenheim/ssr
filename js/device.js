@@ -51,10 +51,10 @@ Device.prototype.BindToCamera = function(id)
 
 	var args = 
 	{
-		frequency:50,
-		gravityNormalized:true,
-		orientationBase:GyroNorm.WORLD,
-		decimalCount:2,
+		frequency: 50,
+		gravityNormalized: true,
+		orientationBase: GyroNorm.GAME,
+		decimalCount: 2,
 		screenAdjusted: false
 	};
 
@@ -79,7 +79,6 @@ Device.prototype.BindToCamera = function(id)
 					
 					var axang = XML3D.AxisAngle.fromQuat(quat);
 					var str = "{0} {1} {2} {3}".format(axang.axis.x, axang.axis.y, axang.axis.z, axang.angle);
-					var debug = document.getElementById("debug");
 					this.camera.setAttribute("rotation", str);
 					//this.camera.innerHTML = str;
 				}
@@ -93,7 +92,7 @@ Device.prototype.BindToCamera = function(id)
 				}
 			}
 		}.bind(this));
-	this.gn.setHeadDirection();
+	//this.gn.setHeadDirection();
 	}.bind(this));
 }
 

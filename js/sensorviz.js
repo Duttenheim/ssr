@@ -103,7 +103,7 @@ var GroupImageMap = new Map();
    @param icon is the icon used to display the sensor
    @param updateFrequency is the frequency with which the sensor data should be updated
 */
-function SensorVizBillboard(group, defs, position, ID, type, icon, updateFreqneucy)
+function SensorVizBillboard(group, defs, position, rotation, ID, type, icon, updateFreqneucy)
 {
 	var mesh = document.createElement("mesh");
 	var root = document.getElementById(group);
@@ -149,7 +149,7 @@ function SensorVizBillboard(group, defs, position, ID, type, icon, updateFreqneu
 	mesh.type = "triangles";
 	mesh.src = "#quadMesh";
 
-	var str = "translate3D({0}px, {1}px, {2}px)".format(position.x, position.y, position.z);
+	var str = "translate3D({0}px, {1}px, {2}px) rotate3D({3}, {4}, {5}, {6}deg)".format(position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, rotation.deg);
 	mesh.style.transform = str;
 	mesh.style.zindex = 2;
 
@@ -158,13 +158,20 @@ function SensorVizBillboard(group, defs, position, ID, type, icon, updateFreqneu
 		var sensorDiv = document.getElementById("sensor");
 		FetchSensor(ID, type, [], function(json)
 		{
-			var sens = json.contextResponses[0].contextElement.attributes;
-			var str = "";
-			for (var i = 0; i < sens.length; i++)
+			if (json.contextResponses == undefined)
 			{
-				str += "{0} = {1}<br>".format(sens[i].name, sens[i].value);
-			}						
-			sensorDiv.innerHTML = str;
+				alert("Sensor not registered!");
+			}
+			else
+			{
+				var sens = json.contextResponses[0].contextElement.attributes;
+				var str = "";
+				for (var i = 0; i < sens.length; i++)
+				{
+					str += "{0} = {1}<br>".format(sens[i].name, sens[i].value);
+				}						
+				sensorDiv.innerHTML = str;
+			}
 		});
 	}.bind(this);
 
