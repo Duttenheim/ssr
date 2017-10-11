@@ -4,7 +4,7 @@ window.addEventListener("load", function()
 	// setup shader for billboard rendering
 	SetupBillboardShader();
 
-	// LORA_Sensor
+	// Setup sensors in Idé-labbet
 	SensorVizBillboard("scene", "defs", {x: -3.736, y: 0.703, z: 3.578}, {x: 0, y: 1, z: 0, deg: 90}, 	"a81758fffe0309f9", "LORA_Sensor", "../icons/romantic.jpg", 50);
 
 	SensorVizBillboard("scene", "defs", {x: -3.736, y: 0.703, z: 2.439}, {x: 0, y: 1, z: 0, deg: 90}, 	"a81758fffe031a81", "LORA_Sensor", "../icons/romantic.jpg", 50);
