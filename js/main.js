@@ -19,66 +19,54 @@ function SetupGMap()
 }
 
 window.addEventListener("load", function()
-						{
-							InitiateFullscreen();
+{
+	InitiateFullscreen();
 							
-							// setup shader for billboard rendering
-							SetupBillboardShader();
+	// setup shader for billboard rendering
+	SetupBillboardShader();
 
-							/*
-							FetchSensorsRadius({lat: 20.95, lon: 64.75}, 250, function(json)
-							{
-								for (var core in json.pois)
-								{
-									var data = json.pois[core].fw_core;
-									var latlon = data.location.wgs84;
-									var worldcoord = ConvertToWorldCoordinate({lat: latlon.latitude, lon: latlon.longitude});
-									SensorVizBillboard("scene", "defs", {x: 10, y: 0, z: 1}, data.source.name, "icons/romantic.jpg", 50);
-								}
-							});
-
-							//SensorViz("scene", {x: 1000, y: 0, z: 0}, "EnviormentalSensor_Sokigo1", 50);
-							//SensorViz("scene", {x: -1000, y: 0, z: 0}, "Sokigo_spatial", 50);
-							//SensorViz("scene", {x: 0, y: 0, z: -1000}, "EnviormentalSensor_S0", 50);
-							//SensorViz("scene", {x: 0, y: 0, z: 1000}, "EnviormentalSensor_S1", 50);
-							SensorVizBillboard("scene", "defs", {x: 0, y: 0, z: 1}, "EnviormentalSensor_S1", "icons/romantic.jpg", 50);
-							SensorVizBillboard("scene", "defs", {x: 1, y: 0, z: 0}, "Sokigo_spatial", "icons/betterdays.jpg", 50);
-							*/
-
-							CameraStartup("video-select", "video", function(err) {alert(err);});
-
-							var qr = new QR("video")
-							InitiateCapture(function(data) { qr.Update(data); }, 1000);
-
-							var dev = new Device("camera-mode", "map-mode", function() { StartCapture(); }, function() { StopCapture(); GMap.setZoom(8); GMap.setCenter(GMe.getPosition()); });
-							document.getElementById("map-mode").addEventListener("resize", function()
-							{
-								if (GMap)
-								{
-									GMap.setZoom(8);
-									GMap.panTo(GMe.getPosition());
-								}
-							});
+	// LORA_Sensor
+	SensorVizBillboard("scene", "defs", {x: 0, y: 0, z: 1}, "EnvironmentalSensor_S2", "sensor", "icons/romantic.jpg", 50);
+	SensorVizBillboard("scene", "defs", {x: 10, y: 0, z: 1}, "EnvironmentalSensor_S3", "sensor", "icons/romantic.jpg", 50);
 	
-							// grab scene div so we can clear it
-							var sceneDiv = document.getElementById("scene");
+	CameraStartup("video-select", "video", function(err) {alert(err);});
 
-							dev.BindToCamera("cameraTransform");
-							dev.TrackLocation(function(position)
+	var qr = new QR("video")
+	InitiateCapture(function(data) { qr.Update(data); }, 1000);
+	
+	var dev = new Device("camera-mode", "map-mode", function() { StartCapture(); }, function() { StopCapture(); GMap.setZoom(8); GMap.setCenter(GMe.getPosition()); });
+	document.getElementById("map-mode").addEventListener("resize", function()
+	{
+		if (GMap)
+		{
+			GMap.setZoom(8);
+			GMap.panTo(GMe.getPosition());
+		}
+	});
+	
+	// grab scene div so we can clear it
+	var sceneDiv = document.getElementById("scene");
+	
+	dev.BindToCamera("cameraTransform");
+	dev.TrackLocation(function(position)
+	{
+						  /*
+							FetchSensorsRadius({lat: position.coords.latitude, lon: position.coords.longitude}, 100, function(json)
 							{
-								FetchSensorsRadius({lat: position.coords.latitude, lon: position.coords.longitude}, 100, function(json)
-								{
-									sceneDiv.innerHTML = "";
-									for (var core in json.pois)
-									{
-										var data = json.pois[core].fw_core;
-										var latlon = data.location.wgs84;
-										var worldcoord = ConvertToWorldCoordinate({lat: latlon.latitude, lon: latlon.longitude});
-										var campos = ConvertToWorldCoordinate({lat:position.coords.latitude, lon:position.coords.longitude});
-										var objpos = {x: worldcoord.x - campos.x, y: worldcoord.y - campos.y, z: worldcoord.z - campos.z};
+							sceneDiv.innerHTML = "";
+							for (var core in json.pois)
+							{
+							var data = json.pois[core].fw_core;
+							var latlon = data.location.wgs84;
+							var worldcoord = ConvertToWorldCoordinate({lat: latlon.latitude, lon: latlon.longitude});
+							var campos = ConvertToWorldCoordinate({lat:position.coords.latitude, lon:position.coords.longitude});
+							
+									// set y to 0, this will be the altitude later
+										var objpos = {x: worldcoord.x - campos.x, y: 0, z: worldcoord.z - campos.z};
 										SensorVizBillboard("scene", "defs", objpos, data.source.name, "icons/romantic.jpg", 50);
 									}
 								});
+								*/
 
 								if (GMe)	
 								{

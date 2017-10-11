@@ -33,10 +33,11 @@ function FetchSensorsBox(min, max, callback)
 /**
    Brute force method which fetches ALL sensors
    @param callback is a function callback which gets run when the fetch is complete
+   @param type is the type of the sensor
 */
-function FetchAllSensors(callback)
+function FetchAllSensors(callback, type)
 {
-	var json = { entities: [{id: " *", type:"sensor", isPattern:"true"}], attributes: []};
+	var json = { entities: [{id: " *", type:type, isPattern:"true"}], attributes: []};
  	SendToFiWarePost(QueryURL, json, callback);
 }
 
@@ -44,12 +45,13 @@ function FetchAllSensors(callback)
 /**
    Fetches a single sensor
    @param id is the name of the sensor
+   @param type is the type of sensor
    @param attributes is a list of strings which represents the values to fetch, if empty gives all attributes
    @param callback is a function callback which gets run when the fetch is complete
 */
-function FetchSensor(id, attributes, callback)
+function FetchSensor(id, type, attributes, callback)
 {
-	var json = { entities: [{id: id, type:"sensor", isPattern:"false"}], attributes: attributes};
+	var json = { entities: [{id: id, type:type, isPattern:"false"}], attributes: attributes};
 	SendToFiWarePost(QueryURL, json, callback);
 }
 
@@ -57,15 +59,16 @@ function FetchSensor(id, attributes, callback)
 /**
    Fetches a bunch of sensors
    @param ids is an array of sensors to fetch
+   @param type is the type of sensor
    @param attributes is a list of strings which represents the values to fetch, if empty, gives all attributes
    @param callback is a function callback which gets run when the fetch is complete
 */
-function FetchSensors(ids, attributes, callback)
+function FetchSensors(ids, type, attributes, callback)
 {
 	var entities = [];
 	for (var i = 0; i < ids.length; i++)
 	{
-		entities.append({id: ids[i], type:"sensor", isPattern:"false"});
+		entities.append({id: ids[i], type:type, isPattern:"false"});
 	}
 	var json = { entities: entities, attributes: attributes};
 	SendToFiWarePost(QueryURL, json, callback);

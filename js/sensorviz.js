@@ -2,11 +2,12 @@
 /**
    Create a new sensor, as a coupling of a 3D representation and a data source
    @param group is the group div (in the xml3d document) in which the objects should appear
+   @param type is the type of sensor to fetch
    @param position is the position of the sensor in cartesian space
    @param ID is the sensor id used to fetch the sensor
    @param updateFrequency is the frequency with which the sensor data should be updated
 */
-function SensorViz(group, position, ID, updateFrequency)
+function SensorViz(group, type, position, ID, updateFrequency)
 {
 	var mesh = document.createElement("mesh");
 	mesh.src = "ext/teapot.json";
@@ -18,7 +19,7 @@ function SensorViz(group, position, ID, updateFrequency)
 	var func = function(event)
 	{
 		var sensorDiv = document.getElementById("sensor");
-		FetchSensor(ID, [], function(json)
+		FetchSensor(ID, type, [], function(json)
 					{
 
 						var sens = json.contextResponses[0].contextElement.attributes;
@@ -98,10 +99,11 @@ var GroupImageMap = new Map();
    @param group is the group div (in the xml3d document) in which the objects should appear
    @param position is the position of the sensor in cartesian space
    @param ID is the sensor id used to fetch the sensor
+   @param type is the type of sensor to fetch
    @param icon is the icon used to display the sensor
    @param updateFrequency is the frequency with which the sensor data should be updated
 */
-function SensorVizBillboard(group, defs, position, ID, icon, updateFreqneucy)
+function SensorVizBillboard(group, defs, position, ID, type, icon, updateFreqneucy)
 {
 	var mesh = document.createElement("mesh");
 	var root = document.getElementById(group);
@@ -154,17 +156,16 @@ function SensorVizBillboard(group, defs, position, ID, icon, updateFreqneucy)
 	var func = function(event)
 	{
 		var sensorDiv = document.getElementById("sensor");
-		FetchSensor(ID, [], function(json)
-					{
-
-						var sens = json.contextResponses[0].contextElement.attributes;
-						var str = "";
-						for (var i = 0; i < sens.length; i++)
-						{
-							str += "{0} = {1}<br>".format(sens[i].name, sens[i].value);
-						}						
-						sensorDiv.innerHTML = str;
-					});
+		FetchSensor(ID, type, [], function(json)
+		{
+			var sens = json.contextResponses[0].contextElement.attributes;
+			var str = "";
+			for (var i = 0; i < sens.length; i++)
+			{
+				str += "{0} = {1}<br>".format(sens[i].name, sens[i].value);
+			}						
+			sensorDiv.innerHTML = str;
+		});
 	}.bind(this);
 
 	// add onclick event listener
