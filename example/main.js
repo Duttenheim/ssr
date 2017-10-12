@@ -17,7 +17,7 @@ window.addEventListener("load", function()
 	SensorVizBillboard("scene", "defs", {x: -3.736, y: 0.703, z: -0.182}, {x: 0, y: 1, z: 0, deg: 90}, 	"a81758fffe031a83", "LORA_Sensor", "../icons/sensor.jpg", 50);
 	SensorVizBillboard("scene", "defs", {x: -3.736, y: 1.5, z: -0.182}, {x: 0, y: 1, z: 0, deg: 90}, 	"a81758fffe031866", "LORA_Sensor", "../icons/sensor.jpg", 50);
 	SensorVizBillboard("scene", "defs", {x: -3.736, y: 0.703, z: -0.986}, {x: 0, y: 1, z: 0, deg: 90}, 	"a81758fffe031865", "LORA_Sensor", "../icons/sensor.jpg", 50);
-	SensorVizBillboard("scene", "defs", {x: -3.736, y: 1.5, z: -0.986}, {x: 0, y: 1, z: 0, deg: 90}, 	"a81758fffe0313bE", "LORA_Sensor", "../icons/sensor.jpg", 50);
+	SensorVizBillboard("scene", "defs", {x: -3.736, y: 1.5, z: -0.986}, {x: 0, y: 1, z: 0, deg: 90}, 	"a81758fffe0313be", "LORA_Sensor", "../icons/sensor.jpg", 50);
 	SensorVizBillboard("scene", "defs", {x: -3.736, y: 0.703, z: -1.639}, {x: 0, y: 1, z: 0, deg: 90}, 	"a81758fffe031a79", "LORA_Sensor", "../icons/sensor.jpg", 50);
 	SensorVizBillboard("scene", "defs", {x: -3.736, y: 1.5, z: -1.639}, {x: 0, y: 1, z: 0, deg: 90}, 	"a81758fffe031bd7", "LORA_Sensor", "../icons/sensor.jpg", 50);
 
